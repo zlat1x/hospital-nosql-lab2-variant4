@@ -1,0 +1,79 @@
+name: SQL vs NoSQL benchmark
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      POSTGRES_DB: hospital_lab2
+      POSTGRES_USER: lab2
+      POSTGRES_PASSWORD: ci_only_temporary_db_password
+      MONGO_DB: hospital_lab2
+      MONGO_URI: mongodb://127.0.0.1:27018/
+      REDIS_URL: redis://127.0.0.1:6381/0
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Start isolated PostgreSQL, MongoDB and Redis
+        run: |
+          docker compose up -d --wait
+          docker compose ps
+
+      - name: Validate Redis commands and load 1000 reports
+        run: |
+          python -m src.load --reports 1000 --patients 50
+          python -m src.validate --samples 80
+          python -m src.redis_demo
+
+      - name: Benchmark 1000 reports
+        run: |
+          python -m src.benchmark --samples 120 --warmups 15 --write-samples 25
+
+      - name: Benchmark 10000 reports
+        run: |
+          python -m src.load --reports 10000 --patients 250
+          python -m src.validate --samples 80
+          python -m src.benchmark --samples 120 --warmups 15 --write-samples 25
+
+      - name: Generate summaries
+        run: |
+          shopt -s nullglob
+          for file in results/benchmark_*.json; do
+            case "$file" in *_plans.json) continue ;; esac
+            python -m src.summarize "$file"
+          done
+          ls -lh results/
+
+      - name: Upload actual benchmarks and summaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hospital-nosql-real-benchmarks
+          path: results/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Docker diagnostics on failure
+        if: failure()
+        run: |
+          docker compose ps -a || true
+          docker compose logs --tail=60 || true

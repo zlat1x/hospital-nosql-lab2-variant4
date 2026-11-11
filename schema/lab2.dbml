@@ -1,0 +1,48 @@
+// Relational schema for laboratory reports (Variant 4).
+
+Table lab2.report {
+  id text [pk]
+  patient_id text [not null]
+  source_encounter_id bigint [note: 'Optional source encounter identifier; no external FK in the benchmark dataset']
+  collected_at timestamptz [not null]
+  status text [not null]
+
+  Indexes {
+    (patient_id, collected_at, id) [name: 'ix_report_patient_date']
+  }
+}
+
+Table lab2.panel {
+  report_id text [not null]
+  code text [not null]
+  Indexes {
+    (report_id, code) [pk]
+  }
+}
+
+Table lab2.test_catalog {
+  panel_code text [not null]
+  test_code text [not null]
+  display_name text [not null]
+  unit text [not null]
+  Indexes {
+    (panel_code, test_code) [pk]
+  }
+}
+
+Table lab2.measurement {
+  report_id text [not null]
+  panel_code text [not null]
+  test_code text [not null]
+  value_num numeric [not null]
+  reference_low numeric [not null]
+  reference_high numeric [not null]
+  Indexes {
+    (report_id, panel_code, test_code) [pk]
+    (test_code, report_id) [name: 'ix_measurement_test']
+  }
+}
+
+Ref: lab2.panel.report_id > lab2.report.id [delete: cascade]
+Ref: lab2.measurement.(report_id, panel_code) > lab2.panel.(report_id, code) [delete: cascade]
+Ref: lab2.measurement.(panel_code, test_code) > lab2.test_catalog.(panel_code, test_code)
