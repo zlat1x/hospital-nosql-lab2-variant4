@@ -1,0 +1,13 @@
+﻿workload,engine,n,mean_ms,p50_ms,p95_ms,min_ms,max_ms,estimated_ops_per_sec_sequential
+full_report,SQL,120,0.3439,0.3376,0.3854,0.3058,0.4777,2907.56
+full_report,MongoDB,120,0.4051,0.3991,0.4439,0.3711,0.4843,2468.65
+latest_10_ids,SQL,120,0.2351,0.23,0.2689,0.213,0.3004,4254.26
+latest_10_ids,MongoDB,120,0.4499,0.4478,0.4883,0.4081,0.5167,2222.75
+abnormal_count,SQL,120,1.5198,1.5164,1.5597,1.4749,1.7749,658.0
+abnormal_count,MongoDB,120,0.7686,0.766,0.8234,0.7055,0.9032,1301.01
+marker_history_20,SQL,120,0.5135,0.5112,0.5475,0.4726,0.5869,1947.34
+marker_history_20,MongoDB,120,0.8137,0.8097,0.8709,0.7465,1.0041,1228.88
+update_one_marker,SQL,25,0.7319,0.7058,0.9118,0.6578,0.932,1366.38
+update_one_marker,MongoDB,25,0.4619,0.4569,0.5199,0.4294,0.5415,2165.06
+insert_full_report,SQL,25,1.8631,1.6706,1.8593,1.6019,6.0929,536.75
+insert_full_report,MongoDB,25,0.4537,0.4464,0.4898,0.4164,0.5882,2203.99

@@ -1,0 +1,181 @@
+{
+  "generated_utc": "2026-11-11T16:45:52.213120+00:00",
+  "environment": {
+    "python": "3.12.16",
+    "platform": "Linux-7.0.0-1019-azure-x86_64-with-glibc2.43",
+    "postgres": "16.15 (Debian 16.15-1.pgdg13+2)",
+    "mongodb": "7.0.45",
+    "topology": "three separate Docker containers on one host; localhost TCP"
+  },
+  "dataset": {
+    "reports": 1000,
+    "patients": 50,
+    "measurements": 8000
+  },
+  "storage": {
+    "postgres_tables_plus_indexes_bytes": 1761280,
+    "mongodb": {
+      "logical_bytes": 1178000,
+      "storage_bytes": 4096,
+      "index_bytes": 12288
+    }
+  },
+  "procedure": {
+    "warmups": 15,
+    "read_trials_per_database": 120,
+    "write_trials_per_database": 25,
+    "ordering": "SQL/MongoDB order alternated by trial",
+    "metric": "client round-trip latency in milliseconds; sequential, single-thread, warm cache",
+    "timing_excludes": "loading, validation, query plans, cleanup, report generation"
+  },
+  "validated_before": {
+    "ok": true,
+    "reports": 1000,
+    "measurements": 8000,
+    "reports_checked": 52,
+    "patients_checked": 12,
+    "exhaustive": false
+  },
+  "validated_after": {
+    "ok": true,
+    "reports": 1000,
+    "measurements": 8000,
+    "reports_checked": 27,
+    "patients_checked": 12,
+    "exhaustive": false
+  },
+  "results": [
+    {
+      "workload": "full_report",
+      "engine": "SQL",
+      "n": 120,
+      "mean_ms": 0.3439,
+      "p50_ms": 0.3376,
+      "p95_ms": 0.3854,
+      "min_ms": 0.3058,
+      "max_ms": 0.4777,
+      "estimated_ops_per_sec_sequential": 2907.56
+    },
+    {
+      "workload": "full_report",
+      "engine": "MongoDB",
+      "n": 120,
+      "mean_ms": 0.4051,
+      "p50_ms": 0.3991,
+      "p95_ms": 0.4439,
+      "min_ms": 0.3711,
+      "max_ms": 0.4843,
+      "estimated_ops_per_sec_sequential": 2468.65
+    },
+    {
+      "workload": "latest_10_ids",
+      "engine": "SQL",
+      "n": 120,
+      "mean_ms": 0.2351,
+      "p50_ms": 0.23,
+      "p95_ms": 0.2689,
+      "min_ms": 0.213,
+      "max_ms": 0.3004,
+      "estimated_ops_per_sec_sequential": 4254.26
+    },
+    {
+      "workload": "latest_10_ids",
+      "engine": "MongoDB",
+      "n": 120,
+      "mean_ms": 0.4499,
+      "p50_ms": 0.4478,
+      "p95_ms": 0.4883,
+      "min_ms": 0.4081,
+      "max_ms": 0.5167,
+      "estimated_ops_per_sec_sequential": 2222.75
+    },
+    {
+      "workload": "abnormal_count",
+      "engine": "SQL",
+      "n": 120,
+      "mean_ms": 1.5198,
+      "p50_ms": 1.5164,
+      "p95_ms": 1.5597,
+      "min_ms": 1.4749,
+      "max_ms": 1.7749,
+      "estimated_ops_per_sec_sequential": 658.0
+    },
+    {
+      "workload": "abnormal_count",
+      "engine": "MongoDB",
+      "n": 120,
+      "mean_ms": 0.7686,
+      "p50_ms": 0.766,
+      "p95_ms": 0.8234,
+      "min_ms": 0.7055,
+      "max_ms": 0.9032,
+      "estimated_ops_per_sec_sequential": 1301.01
+    },
+    {
+      "workload": "marker_history_20",
+      "engine": "SQL",
+      "n": 120,
+      "mean_ms": 0.5135,
+      "p50_ms": 0.5112,
+      "p95_ms": 0.5475,
+      "min_ms": 0.4726,
+      "max_ms": 0.5869,
+      "estimated_ops_per_sec_sequential": 1947.34
+    },
+    {
+      "workload": "marker_history_20",
+      "engine": "MongoDB",
+      "n": 120,
+      "mean_ms": 0.8137,
+      "p50_ms": 0.8097,
+      "p95_ms": 0.8709,
+      "min_ms": 0.7465,
+      "max_ms": 1.0041,
+      "estimated_ops_per_sec_sequential": 1228.88
+    },
+    {
+      "workload": "update_one_marker",
+      "engine": "SQL",
+      "n": 25,
+      "mean_ms": 0.7319,
+      "p50_ms": 0.7058,
+      "p95_ms": 0.9118,
+      "min_ms": 0.6578,
+      "max_ms": 0.932,
+      "estimated_ops_per_sec_sequential": 1366.38
+    },
+    {
+      "workload": "update_one_marker",
+      "engine": "MongoDB",
+      "n": 25,
+      "mean_ms": 0.4619,
+      "p50_ms": 0.4569,
+      "p95_ms": 0.5199,
+      "min_ms": 0.4294,
+      "max_ms": 0.5415,
+      "estimated_ops_per_sec_sequential": 2165.06
+    },
+    {
+      "workload": "insert_full_report",
+      "engine": "SQL",
+      "n": 25,
+      "mean_ms": 1.8631,
+      "p50_ms": 1.6706,
+      "p95_ms": 1.8593,
+      "min_ms": 1.6019,
+      "max_ms": 6.0929,
+      "estimated_ops_per_sec_sequential": 536.75
+    },
+    {
+      "workload": "insert_full_report",
+      "engine": "MongoDB",
+      "n": 25,
+      "mean_ms": 0.4537,
+      "p50_ms": 0.4464,
+      "p95_ms": 0.4898,
+      "min_ms": 0.4164,
+      "max_ms": 0.5882,
+      "estimated_ops_per_sec_sequential": 2203.99
+    }
+  ]
+}
